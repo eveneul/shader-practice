@@ -25,8 +25,20 @@ controls.enableDamping = true;
 /* Object */
 
 const geomatry = new THREE.PlaneGeometry(3, 3, 16, 16);
+console.log("🐹 ~ geomatry:", geomatry);
+
+const count = geomatry.attributes.position.count;
+const randoms = new Float32Array(count);
+
+for (let i = 0; i < count; i++) {
+  randoms[i] = Math.random();
+}
+
+geomatry.setAttribute("aRandom", new THREE.BufferAttribute(randoms, 1));
+console.log(geomatry);
 const material = new THREE.ShaderMaterial({
   side: THREE.DoubleSide,
+  transparent: true,
   uniforms: {},
   vertexShader,
   fragmentShader,
