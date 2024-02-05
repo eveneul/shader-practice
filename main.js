@@ -29,6 +29,8 @@ renderer.setSize(sizes.width, sizes.height);
 const controls = new OrbitControls(camera, canvas);
 controls.enableDamping = true;
 
+const textureLoader = new THREE.TextureLoader();
+
 /* Object */
 
 const geomatry = new THREE.PlaneGeometry(3, 3, 16, 16);
@@ -49,6 +51,7 @@ const material = new THREE.ShaderMaterial({
     uFrequency: { value: new THREE.Vector2(10, 5) },
     uTime: { value: 0 },
     uColor: { value: new THREE.Color("orange") },
+    uTexture: { value: textureLoader.load("/img.jpeg") },
   },
   vertexShader,
   fragmentShader,
