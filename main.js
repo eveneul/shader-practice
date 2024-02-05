@@ -14,8 +14,15 @@ canvas.height = sizes.height;
 
 /* Basic Three.js Obejct */
 
+const gui = new GUI();
+
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 2000);
+const camera = new THREE.PerspectiveCamera(
+  75,
+  sizes.width / sizes.height,
+  0.1,
+  2000
+);
 camera.position.set(0, 0, 5);
 const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
 renderer.setSize(sizes.width, sizes.height);
@@ -38,16 +45,42 @@ geomatry.setAttribute("aRandom", new THREE.BufferAttribute(randoms, 1));
 console.log(geomatry);
 const material = new THREE.ShaderMaterial({
   side: THREE.DoubleSide,
-  transparent: true,
-  uniforms: {},
+  uniforms: {
+    uFrequency: { value: new THREE.Vector2(10, 5) },
+    uTime: { value: 0 },
+    uColor: { value: new THREE.Color("orange") },
+  },
   vertexShader,
   fragmentShader,
 });
+
+gui
+  .add(material.uniforms.uFrequency.value, "x")
+  .min(0)
+  .max(20)
+  .step(0.1)
+  .name("x");
+gui
+  .add(material.uniforms.uFrequency.value, "y")
+  .min(0)
+  .max(20)
+  .step(0.1)
+  .name("y");
+
 const mesh = new THREE.Mesh(geomatry, material);
 scene.add(mesh);
 
+mesh.scale.y = 2 / 3;
+
+const clock = new THREE.Clock();
+
 const tick = () => {
   requestAnimationFrame(tick);
+  const time = clock.getElapsedTime();
+
+  // update material
+  material.uniforms.uTime.value = time;
+
   controls.update();
   renderer.render(scene, camera);
 };
